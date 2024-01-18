@@ -2,13 +2,21 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import { IconButton, DatePicker, TimePicker } from 'react-native-paper';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ReminderScreen = () => {
-  const [fromDate, setFromDate] = useState(null);
+  const [fromDate, setFromDate] = useState(new Date());
   const [fromTime, setFromTime] = useState(null);
   const [toDate, setToDate] = useState(null);
   const [toTime, setToTime] = useState(null);
+  
+  const showDatePicker = (mode) => {
+    // Implement logic to show date picker
+  };
+
+  const showTimePicker = (mode) => {
+    // Implement logic to show time picker
+  };
 
   return (
     <View style={{ flex: 1, padding: 18, marginTop: 28 }}>
@@ -30,15 +38,46 @@ const ReminderScreen = () => {
       <TextInput placeholder="Location or URL" style={{ ...styles.input, backgroundColor: '#f0f0f0' }} />
 
       <Text style={styles.label}>From</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <TextInput placeholder="Date" style={{ ...styles.gridInput, backgroundColor: '#f0f0f0' }} />
-        <TextInput placeholder="Time" style={{ ...styles.gridInput, backgroundColor: '#f0f0f0' }} />
+      {/* Use a parent View with flexDirection: 'row' for the grid layout */}
+      <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+        {/* Separate Views for Date and Time with individual TouchableOpacity */}
+        <View style={{ flex: 1, marginRight: 8 }}>
+          <TouchableOpacity onPress={() => showDatePicker('from')}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
+            <IconButton icon="calendar" size={20} color="#666666" style={{ marginRight: 2 }}/>
+              <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Date</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, marginLeft: 14}}>
+          <TouchableOpacity onPress={() => showTimePicker('from')}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
+            <IconButton icon="clock" size={20} color="#666666" style={{ marginRight: 2 }} />
+              <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Time</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <Text style={styles.label}>To</Text>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <TextInput placeholder="Date" style={{ ...styles.gridInput, backgroundColor: '#f0f0f0' }} />
-        <TextInput placeholder="Time" style={{ ...styles.gridInput, backgroundColor: '#f0f0f0' }} />
+      {/* Similar structure for the "To" section */}
+      <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+        <View style={{ flex: 1, marginRight: 8 }}>
+          <TouchableOpacity onPress={() => showDatePicker('to')}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
+            <IconButton icon="calendar" size={20} color="#666666" style={{ marginRight: 2 }} />
+              <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Date</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+        <View style={{ flex: 1, marginLeft: 14}}>
+          <TouchableOpacity onPress={() => showTimePicker('to')}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
+            <IconButton icon="clock" size={20} color="#666666" style={{ marginRight: 2 }} />
+              <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Time</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Add an additional View for Notes with paddingTop */}
@@ -64,7 +103,7 @@ const ReminderScreen = () => {
 const styles = StyleSheet.create({
   input: {
     marginBottom: 16,
-    padding: 8,
+    padding: 10,
     borderRadius: 8,
     backgroundColor: '#f0f0f0',
   },
