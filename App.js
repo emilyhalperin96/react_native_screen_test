@@ -6,16 +6,28 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 const ReminderScreen = () => {
   const [fromDate, setFromDate] = useState(new Date());
-  const [fromTime, setFromTime] = useState(null);
-  const [toDate, setToDate] = useState(null);
-  const [toTime, setToTime] = useState(null);
-  
-  const showDatePicker = (mode) => {
-    // Implement logic to show date picker
+  const [fromTime, setFromTime] = useState(new Date());
+  const [toDate, setToDate] = useState(new Date());
+  const [toTime, setToTime] = useState(new Date());
+  const [showFromDatePicker, setShowFromDatePicker] = useState(false);
+  const [showToDatePicker, setShowToDatePicker] = useState(false);
+  const [showFromTimePicker, setShowFromTimePicker] = useState(false);
+  const [showToTimePicker, setShowToTimePicker] = useState(false);
+
+  const showDatePicker = () => {
+    setShowFromDatePicker(true);
   };
 
-  const showTimePicker = (mode) => {
-    // Implement logic to show time picker
+  const showToDatePickerFunc = () => {
+    setShowToDatePicker(true);
+  };
+
+  const showTimePicker = (isFrom) => {
+    if (isFrom) {
+      setShowFromTimePicker(true);
+    } else {
+      setShowToTimePicker(true);
+    }
   };
 
   return (
@@ -38,47 +50,95 @@ const ReminderScreen = () => {
       <TextInput placeholder="Location or URL" style={{ ...styles.input, backgroundColor: '#f0f0f0' }} />
 
       <Text style={styles.label}>From</Text>
-      {/* Use a parent View with flexDirection: 'row' for the grid layout */}
       <View style={{ flexDirection: 'row', marginBottom: 16 }}>
-        {/* Separate Views for Date and Time with individual TouchableOpacity */}
         <View style={{ flex: 1, marginRight: 8 }}>
           <TouchableOpacity onPress={() => showDatePicker('from')}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
-            <IconButton icon="calendar" size={20} color="#666666" style={{ marginRight: 2 }}/>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40 }}>
+              <IconButton icon="calendar" size={20} color="#666666" style={{ marginRight: 2 }} />
               <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Date</Text>
             </View>
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, marginLeft: 14}}>
-          <TouchableOpacity onPress={() => showTimePicker('from')}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
-            <IconButton icon="clock" size={20} color="#666666" style={{ marginRight: 2 }} />
+
+        {showFromDatePicker && <DateTimePicker
+          value={fromDate}
+          mode="date"
+          onChange={(event, date) => {
+            setShowFromDatePicker(false);
+            if (date) {
+              setFromDate(date);
+            }
+          }} />}
+        <View style={{ flex: 1, marginLeft: 14 }}>
+          <TouchableOpacity onPress={() => showTimePicker(true)}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40 }}>
+              <IconButton icon="clock" size={20} color="#666666" style={{ marginRight: 2 }} />
               <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Time</Text>
             </View>
           </TouchableOpacity>
         </View>
       </View>
 
+      {showFromTimePicker && (
+        <DateTimePicker
+          value={fromTime}
+          mode='time'
+          is24Hour={true}
+          display='default'
+          onChange={(event, time) => {
+            setShowFromTimePicker(false);
+            if (time) {
+              setFromTime(time);
+            }
+          }} />)}
+
       <Text style={styles.label}>To</Text>
-      {/* Similar structure for the "To" section */}
       <View style={{ flexDirection: 'row', marginBottom: 16 }}>
         <View style={{ flex: 1, marginRight: 8 }}>
-          <TouchableOpacity onPress={() => showDatePicker('to')}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
-            <IconButton icon="calendar" size={20} color="#666666" style={{ marginRight: 2 }} />
+          <TouchableOpacity onPress={() => showToDatePickerFunc()}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40 }}>
+              <IconButton icon="calendar" size={20} color="#666666" style={{ marginRight: 2 }} />
               <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Date</Text>
             </View>
           </TouchableOpacity>
         </View>
-        <View style={{ flex: 1, marginLeft: 14}}>
-          <TouchableOpacity onPress={() => showTimePicker('to')}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40}}>
-            <IconButton icon="clock" size={20} color="#666666" style={{ marginRight: 2 }} />
+
+        {showToDatePicker && <DateTimePicker
+          value={toDate}
+          mode="date"
+          onChange={(event, date) => {
+            setShowToDatePicker(false);
+            if (date) {
+              setToDate(date);
+            }
+          }}
+        />
+        }
+
+        <View style={{ flex: 1, marginLeft: 14 }}>
+          <TouchableOpacity onPress={() => showTimePicker(false)}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#f0f0f0', padding: 12, borderRadius: 8, height: 40 }}>
+              <IconButton icon="clock" size={20} color="#666666" style={{ marginRight: 2 }} />
               <Text style={{ ...styles.gridLabel, color: '#666666', marginLeft: 2 }}>Time</Text>
             </View>
           </TouchableOpacity>
         </View>
       </View>
+
+      {showToTimePicker && (
+        <DateTimePicker
+          value={toTime}
+          mode='time'
+          is24Hour={true}
+          display='default'
+          onChange={(event, time) => {
+            setShowToTimePicker(false);
+            if (time) {
+              setToTime(time);
+            }
+          }} />)}
+
+      
 
       {/* Add an additional View for Notes with paddingTop */}
       <View style={{ paddingTop: 12 }}>
